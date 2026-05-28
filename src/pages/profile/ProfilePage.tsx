@@ -109,10 +109,19 @@ export function ProfilePage() {
       </div>
 
       {/* Sign out */}
-      <button onClick={handleSignOut} className="flex items-center gap-2 text-sm text-red-500 font-medium hover:text-red-600">
-        <LogOut className="w-4 h-4" />
-        {isDemoMode ? 'Exit demo mode' : 'Sign out'}
-      </button>
+      <div className="card mb-4">
+        <button
+          onClick={handleSignOut}
+          className="flex items-center gap-3 px-4 py-3 w-full text-left hover:bg-red-50 transition-colors rounded-xl"
+        >
+          <div className="w-8 h-8 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <LogOut className="w-4 h-4 text-red-500" />
+          </div>
+          <span className="text-sm font-medium text-red-500">
+            {isDemoMode ? 'Exit demo mode' : 'Sign out'}
+          </span>
+        </button>
+      </div>
     </div>
   )
 }
