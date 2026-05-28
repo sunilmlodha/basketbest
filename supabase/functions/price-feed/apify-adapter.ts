@@ -42,7 +42,7 @@ export async function searchTesco(
   maxItems = 3
 ): Promise<ScrapedPrice[]> {
   // Run the actor synchronously and get results back immediately
-  const url = `${APIFY_BASE}/acts/jupri~tesco-grocery/run-sync-get-dataset-items?token=${apifyToken}&timeout=30&memory=256`
+  const url = `${APIFY_BASE}/acts/jupri~tesco-grocery/run-sync-get-dataset-items?token=${apifyToken}&timeout=90&memory=256`
 
   const resp = await fetch(url, {
     method: 'POST',
