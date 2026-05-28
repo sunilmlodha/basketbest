@@ -137,19 +137,24 @@ export function SchedulePage() {
         </div>
 
         {/* Delivery address */}
-        <div className="card px-4 py-3">
-          <div className="flex items-start gap-3">
-            <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">{DEMO_ADDRESS.label}</span>
-                <button className="text-xs text-brand-600 font-medium">Change</button>
+        {(() => {
+          const addr = getAddress(user?.postcode)
+          return (
+            <div className="card px-4 py-3">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-gray-500">{addr.label}</span>
+                    <button className="text-xs text-brand-600 font-medium">Change</button>
+                  </div>
+                  <p className="text-sm text-gray-900 mt-0.5">{addr.line1}</p>
+                  <p className="text-sm text-gray-900">{addr.city}, {addr.postcode}</p>
+                </div>
               </div>
-              <p className="text-sm text-gray-900 mt-0.5">{DEMO_ADDRESS.line1}</p>
-              <p className="text-sm text-gray-900">{DEMO_ADDRESS.city}, {DEMO_ADDRESS.postcode}</p>
             </div>
-          </div>
-        </div>
+          )
+        })()}
 
         {/* Comparison limit warning */}
         {atLimit && (
