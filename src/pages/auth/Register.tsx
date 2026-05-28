@@ -33,11 +33,12 @@ export function Register() {
       })
       if (authError) throw authError
       if (data.user) {
-        // In demo/local mode without email confirmation
         if (data.session) {
+          // Confirmed immediately (e.g. email confirmation disabled) → onboarding
           setUser({ id: data.user.id, fullName: form.fullName, email: form.email, postcode: form.postcode, loyaltyCards: {}, createdAt: data.user.created_at })
-          navigate('/basket')
+          navigate('/onboarding')
         } else {
+          // Email confirmation required — show verify screen
           setStep('verify')
         }
       }

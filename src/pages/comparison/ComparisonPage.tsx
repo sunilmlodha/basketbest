@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CheckCircle2, AlertCircle, ChevronRight, ChevronDown, ChevronUp,
@@ -6,10 +6,13 @@ import {
 } from 'lucide-react'
 import { useAppStore } from '../../store'
 import { DEMO_COMPARISON } from '../../lib/demo-data'
-import { STORES, type StoreId } from '../../types'
+import { STORES, type StoreId, type ComparisonResult } from '../../types'
 import { StoreChip } from '../../components/StoreChip'
 import { ProgressBar } from '../../components/ProgressBar'
 import { formatGBP } from '../../lib/utils'
+import { supabase } from '../../lib/supabase'
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string
 
 const FETCH_STEPS: Array<{ store: StoreId; delay: number }> = [
   { store: 'tesco',      delay: 800  },
@@ -20,11 +23,83 @@ const FETCH_STEPS: Array<{ store: StoreId; delay: number }> = [
   { store: 'waitrose',   delay: 5500 },
 ]
 
+/** Build a ComparisonResult from raw price data returned by the price-feed function */
+function buildComparison(
+  basketItems: Array<{ id: string; name: string; quantity: number }>,
+  priceResults: Array<{ productId: string; productName: string; prices: Record<StoreId, number | null> }>
+): ComparisonResult {
+  const STORES_LIST: StoreId[] = ['tesco', 'asda', 'sainsburys', 'morrisons', 'ocado', 'waitrose']
+  const DELIVERY_FEES: Record<StoreId, number> = {
+    tesco: 3.99, asda: 3.50, sainsburys: 3.99, morrisons: 4.49, ocado: 3.99, waitrose: 4.99,
+  }
+
+  // Per-store totals
+  const storeTotals: Record<StoreId, number> = {} as Record<StoreId, number>
+  STORES_LIST.forEach(s => { storeTotals[s] = 0 })
+
+  const lineItems = priceResults.map(r => {
+    const qty = basketItems.find(b => b.id === r.productId)?.quantity ?? 1
+    const results: ComparisonResult['lineItems'][0]['results'] = {}
+    let cheapestStore: StoreId | undefined
+    let cheapestPrice = Infinity
+
+    STORES_LIST.forEach(s => {
+      const p = r.prices[s]
+      if (p != null && p > 0) {
+        results[s] = { price: p * qty, unitPrice: p, available: true, isSubstitute: false }
+        storeTotals[s] += p * qty
+        if (p < cheapestPrice) { cheapestPrice = p; cheapestStore = s }
+      }
+    })
+    return { productId: r.productId, productName: r.productName, quantity: qty, unit: 'each', results, cheapestStore }
+  })
+
+  // Build store results
+  const maxTotal = Math.max(...STORES_LIST.map(s => storeTotals[s]).filter(t => t > 0))
+  const storeResults = STORES_LIST.map(s => ({
+    store: s, status: storeTotals[s] > 0 ? 'done' : 'failed' as 'done' | 'failed',
+    percent: 100, itemsMatched: storeTotals[s] > 0 ? priceResults.length : 0,
+    totalItems: priceResults.length, totalPrice: storeTotals[s] || undefined,
+    fetchedAt: new Date().toISOString(),
+  }))
+
+  // Top 3 recommendations (stores with prices, sorted cheapest first)
+  const ranked = STORES_LIST
+    .filter(s => storeTotals[s] > 0)
+    .sort((a, b) => storeTotals[a] - storeTotals[b])
+    .slice(0, 3)
+
+  const recommendations = ranked.map((s, i) => ({
+    rank: (i + 1) as 1 | 2 | 3,
+    store: s,
+    totalPrice: storeTotals[s],
+    totalAfterLoyalty: storeTotals[s],
+    loyaltySaving: 0,
+    savingsVsMax: maxTotal - storeTotals[s],
+    itemsCovered: priceResults.filter(r => r.prices[s] != null).length,
+    totalItems: priceResults.length,
+    unavailableItems: priceResults.filter(r => !r.prices[s]).map(r => r.productName),
+    substitutions: 0,
+    deliveryFee: DELIVERY_FEES[s],
+    deliveryEta: '2–4 hrs',
+  }))
+
+  return {
+    id: `cmp-${Date.now()}`,
+    deliveryId: '',
+    storeResults,
+    lineItems,
+    recommendations: recommendations.length > 0 ? recommendations : DEMO_COMPARISON.recommendations,
+    savingsVsMax: recommendations[0] ? maxTotal - recommendations[0].totalPrice : 0,
+    createdAt: new Date().toISOString(),
+  }
+}
+
 export function ComparisonPage() {
   const navigate = useNavigate()
   const {
     isComparing, setComparing, setComparison,
-    currentComparison, getActiveBasket,
+    currentComparison, getActiveBasket, isDemoMode,
   } = useAppStore()
 
   const basket = getActiveBasket()
@@ -32,38 +107,74 @@ export function ComparisonPage() {
   const [overallPercent, setOverallPercent] = useState(0)
   const [expandedStore, setExpandedStore] = useState<StoreId | null>(null)
   const [selectedRec, setSelectedRec] = useState(0)
+  const fetchStarted = useRef(false)
 
-  // Simulate agentic price fetch animation
   useEffect(() => {
     if (!isComparing) return
+    if (fetchStarted.current) return
+    fetchStarted.current = true
 
     const timers: ReturnType<typeof setTimeout>[] = []
     let doneCount = 0
 
+    // Kick off the real price fetch in the background (non-blocking)
+    let livePricePromise: Promise<ComparisonResult | null> = Promise.resolve(null)
+
+    if (!isDemoMode && basket && SUPABASE_URL) {
+      livePricePromise = (async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
+          const products = basket.items.map(i => ({ id: i.product.id, name: i.product.name }))
+          const resp = await fetch(`${SUPABASE_URL}/functions/v1/price-feed`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session?.access_token}`,
+            },
+            body: JSON.stringify({ products, basketId: basket.id }),
+          })
+          if (!resp.ok) return null
+          const data = await resp.json()
+          if (data.results?.length > 0) {
+            return buildComparison(
+              basket.items.map(i => ({ id: i.product.id, name: i.product.name, quantity: i.quantity })),
+              data.results
+            )
+          }
+        } catch (err) {
+          console.warn('[comparison] price-feed fetch failed, using demo data', err)
+        }
+        return null
+      })()
+    }
+
+    // Animate each store row progressively
     FETCH_STEPS.forEach(({ store, delay }) => {
-      // Start fetching
       timers.push(setTimeout(() => {
         setProgress(p => ({ ...p, [store]: 'fetching' }))
       }, delay))
 
-      // Mark done 800ms later
       timers.push(setTimeout(() => {
         setProgress(p => ({ ...p, [store]: 'done' }))
         doneCount++
         setOverallPercent(Math.round((doneCount / FETCH_STEPS.length) * 100))
 
         if (doneCount === FETCH_STEPS.length) {
-          // All done — show results
-          setTimeout(() => {
+          // Wait for real fetch to resolve, then show results
+          setTimeout(async () => {
+            const liveResult = await livePricePromise
             setComparing(false)
-            setComparison(DEMO_COMPARISON)
+            setComparison(liveResult ?? DEMO_COMPARISON)
           }, 600)
         }
       }, delay + 800))
     })
 
-    return () => timers.forEach(clearTimeout)
-  }, [isComparing, setComparing, setComparison])
+    return () => {
+      timers.forEach(clearTimeout)
+      fetchStarted.current = false
+    }
+  }, [isComparing, setComparing, setComparison, isDemoMode, basket])
 
   // Loading / progress screen
   if (isComparing) {

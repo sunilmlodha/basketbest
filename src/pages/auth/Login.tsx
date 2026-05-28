@@ -163,35 +163,6 @@ export function Login() {
                 />
               </div>
             </div>
-            <div>
-              <label className="label">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type={showPwd ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="input pl-9 pr-10"
-                  placeholder="••••••••"
-                  required
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPwd(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 text-sm rounded-xl">
-                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                {error}
-              </div>
-            )}
 
             {!magicMode && (
               <div>
@@ -207,7 +178,7 @@ export function Login() {
                     onChange={e => setPassword(e.target.value)}
                     className="input pl-9 pr-10"
                     placeholder="••••••••"
-                    required={!magicMode}
+                    required
                     autoComplete="current-password"
                   />
                   <button
@@ -218,6 +189,13 @@ export function Login() {
                     {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="flex items-start gap-2 p-3 bg-red-50 text-red-700 text-sm rounded-xl">
+                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                {error}
               </div>
             )}
 

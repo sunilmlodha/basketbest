@@ -16,12 +16,18 @@ export function ProfilePage() {
     setSaved(false)
   }
 
-  function handleSave() {
-    if (user) {
-      useAppStore.getState().setUser({ ...user, loyaltyCards })
-      setSaved(true)
-      setTimeout(() => setSaved(false), 2000)
+  async function handleSave() {
+    if (!user) return
+    useAppStore.getState().setUser({ ...user, loyaltyCards })
+    if (!isDemoMode) {
+      // Persist to Supabase profiles table
+      await supabase
+        .from('profiles')
+        .update({ loyalty_cards: loyaltyCards, updated_at: new Date().toISOString() })
+        .eq('id', user.id)
     }
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
   }
 
   async function handleSignOut() {

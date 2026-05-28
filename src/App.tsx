@@ -65,7 +65,7 @@ export default function App() {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setUser({
           id: session.user.id,
@@ -76,7 +76,10 @@ export default function App() {
           createdAt: session.user.created_at,
         })
       }
-      // Don't clear user on sign-out — demo mode doesn't use Supabase
+      // Clear user state on explicit sign-out (but not demo mode — that uses setUser(null) directly)
+      if (event === 'SIGNED_OUT') {
+        setUser(null)
+      }
     })
 
     return () => subscription.unsubscribe()

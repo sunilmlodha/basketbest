@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Clock, MapPin, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronRight, ChevronLeft, Lock } from 'lucide-react'
 import { useAppStore } from '../../store'
+import { TIER_LIMITS } from '../../store'
 import { getDeliveryDates, formatGBP } from '../../lib/utils'
 import type { DeliverySlot } from '../../types'
 
@@ -11,20 +12,29 @@ const SLOTS: { id: DeliverySlot; label: string; time: string }[] = [
   { id: 'EVENING', label: 'Evening',   time: '17:00 – 21:00' },
 ]
 
-const DEMO_ADDRESS = {
-  id: 'addr-1',
-  userId: 'demo-user',
-  label: 'Home',
-  line1: '42 Victoria Street',
-  city: 'London',
-  postcode: 'SW1A 1AA',
-  isDefault: true,
+// Falls back to a demo address until real address management is built
+function getAddress(postcode?: string) {
+  return {
+    id: 'addr-1',
+    userId: 'user',
+    label: 'Home',
+    line1: '42 Victoria Street',
+    city: 'London',
+    postcode: postcode || 'SW1A 1AA',
+    isDefault: true,
+  }
 }
 
 export function SchedulePage() {
   const navigate = useNavigate()
-  const { getActiveBasket, setPendingDelivery, setComparing, setComparison } = useAppStore()
+  const {
+    getActiveBasket, setPendingDelivery, setComparing, setComparison,
+    canRunComparison, incrementComparisons, subscriptionTier,
+    comparisonsUsedThisMonth, user,
+  } = useAppStore()
   const basket = getActiveBasket()
+  const atLimit = !canRunComparison()
+  const limit = TIER_LIMITS[subscriptionTier].comparisons
 
   const dates = getDeliveryDates()
   const [selectedDate, setSelectedDate] = useState(dates[1].date)
@@ -33,14 +43,18 @@ export function SchedulePage() {
 
   async function handleConfirm() {
     if (!basket) return
-    setConfirming(true)
+    if (atLimit) { navigate('/pricing'); return }
 
+    setConfirming(true)
+    incrementComparisons()
+
+    const address = getAddress(user?.postcode)
     const delivery = {
       id: `delivery-${Date.now()}`,
       basketId: basket.id,
-      userId: 'demo-user',
-      addressId: DEMO_ADDRESS.id,
-      address: DEMO_ADDRESS,
+      userId: user?.id || 'demo-user',
+      addressId: address.id,
+      address,
       scheduledDate: selectedDate,
       scheduledSlot: selectedSlot,
       status: 'comparing' as const,
@@ -51,8 +65,6 @@ export function SchedulePage() {
     setPendingDelivery(delivery)
     setComparing(true)
     setComparison(null)
-
-    // Navigate immediately — comparison screen handles the animation
     navigate('/comparison')
   }
 
@@ -139,20 +151,45 @@ export function SchedulePage() {
           </div>
         </div>
 
-        {/* Price info */}
-        <div className="mt-4 p-3 bg-brand-50 rounded-xl">
-          <p className="text-xs text-brand-700">
-            <strong>Delivery fee:</strong> {formatGBP(3.99)} · Free over £50 at most stores
-          </p>
-        </div>
+        {/* Comparison limit warning */}
+        {atLimit && (
+          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
+            <Lock className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-xs font-semibold text-amber-800">Monthly limit reached</p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                Free plan includes {limit} comparison{limit !== 1 ? 's' : ''}/month.
+                Upgrade to Plus for unlimited comparisons.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!atLimit && (
+          <div className="mt-4 p-3 bg-brand-50 rounded-xl">
+            <p className="text-xs text-brand-700">
+              <strong>Delivery fee:</strong> {formatGBP(3.99)} · Free over £50 at most stores
+              {limit !== Infinity && (
+                <span className="ml-2 text-brand-500">· {limit - comparisonsUsedThisMonth} comparison{limit - comparisonsUsedThisMonth !== 1 ? 's' : ''} left this month</span>
+              )}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Sticky CTA */}
       <div className="sticky-bottom">
-        <button onClick={handleConfirm} disabled={confirming} className="btn-primary-lg w-full">
-          {confirming ? 'Starting comparison…' : 'Find best price now'}
-          <ChevronRight className="w-5 h-5" />
-        </button>
+        {atLimit ? (
+          <button onClick={() => navigate('/pricing')} className="btn-primary-lg w-full bg-amber-500 hover:bg-amber-600">
+            Upgrade to continue
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        ) : (
+          <button onClick={handleConfirm} disabled={confirming} className="btn-primary-lg w-full">
+            {confirming ? 'Starting comparison…' : 'Find best price now'}
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        )}
         <p className="text-center text-xs text-gray-400 mt-2">Takes about 60 seconds · Comparing 6 stores</p>
       </div>
     </div>
