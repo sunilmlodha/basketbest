@@ -42,6 +42,7 @@ interface AppState extends AuthState, BasketState, ComparisonState, DeliveryStat
   // Auth actions
   setUser: (user: UserProfile | null) => void
   setLoading: (v: boolean) => void
+  setDemoMode: (v: boolean) => void
   enterDemoMode: () => void
   setSubscriptionTier: (tier: SubscriptionTier) => void
   incrementComparisons: () => void
@@ -98,6 +99,7 @@ export const useAppStore = create<AppState>()(
       // Auth actions
       setUser: (user) => set({ user }),
       setLoading: (isLoading) => set({ isLoading }),
+      setDemoMode: (isDemoMode) => set({ isDemoMode }),
       setSubscriptionTier: (tier) => set({ subscriptionTier: tier }),
       incrementComparisons: () => set((s) => ({ comparisonsUsedThisMonth: s.comparisonsUsedThisMonth + 1 })),
       canRunComparison: () => {

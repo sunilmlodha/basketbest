@@ -75,8 +75,9 @@ export default function App() {
           loyaltyCards: session.user.user_metadata.loyalty_cards || {},
           createdAt: session.user.created_at,
         })
+        // Always exit demo mode when a real session starts
+        useAppStore.getState().setDemoMode(false)
       }
-      // Clear user state on explicit sign-out (but not demo mode — that uses setUser(null) directly)
       if (event === 'SIGNED_OUT') {
         setUser(null)
       }
