@@ -71,11 +71,10 @@ interface PriceFeedResponse {
 
 interface PriceCacheRow {
   product_id: string
-  store_id: StoreId
+  store: StoreId
   price: number
   available: boolean
   fetched_at: string
-  expires_at: string
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -150,7 +149,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
   })
 
   const fetchedAt = nowIso()
-  const expiresAt = expiresIso()
 
   // ── Fetch live prices via Apify actors ─────────────────────────────────────
   // fetchBasketPricesApify returns Map<productName, Partial<Record<StoreId, number>>>
@@ -173,7 +171,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   const { data: cacheData, error: cacheError } = await supabase
     .from('price_cache')
-    .select('product_id, store_id, price, available, fetched_at, expires_at')
+    .select('product_id, store, price, available, fetched_at')
     .in('product_id', productIds)
 
   if (cacheError) {
@@ -185,7 +183,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   // Index cache by "productId|storeId" for O(1) lookups
   const cacheIndex = new Map<string, PriceCacheRow>()
   for (const row of cacheRows) {
-    cacheIndex.set(`${row.product_id}|${row.store_id}`, row)
+    cacheIndex.set(`${row.product_id}|${row.store}`, row)
   }
 
   // ── Build results & collect upsert records ─────────────────────────────────
@@ -209,16 +207,15 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
           upsertRecords.push({
             product_id: product.id,
-            store_id: store,
+            store,
             price: livePrice,
             available: true,
             fetched_at: fetchedAt,
-            expires_at: expiresAt,
           })
         } else {
           // Store not returned by API — use cache if available and not expired
           const cached = cacheIndex.get(`${product.id}|${store}`)
-          if (cached && cached.available && new Date(cached.expires_at) > new Date()) {
+          if (cached && cached.available && (Date.now() - new Date(cached.fetched_at).getTime()) < TTL_HOURS * 3600_000) {
             prices[store] = cached.price
             hasAnyPrice = true
           }
@@ -229,7 +226,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       // No live data for this product — try full cache fallback
       for (const store of STORES) {
         const cached = cacheIndex.get(`${product.id}|${store}`)
-        if (cached && cached.available && new Date(cached.expires_at) > new Date()) {
+        if (cached && cached.available && (Date.now() - new Date(cached.fetched_at).getTime()) < TTL_HOURS * 3600_000) {
           prices[store] = cached.price
           hasAnyPrice = true
         }
@@ -252,7 +249,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       const chunk = upsertRecords.slice(i, i + CHUNK_SIZE)
       const { error: upsertError } = await supabase
         .from('price_cache')
-        .upsert(chunk, { onConflict: 'product_id,store_id' })
+        .upsert(chunk, { onConflict: 'product_id,store' })
 
       if (upsertError) {
         // Log but don't fail the request — the caller still gets price data
