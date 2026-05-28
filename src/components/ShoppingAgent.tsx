@@ -8,7 +8,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, X, Send, ChevronDown, ShoppingBasket, Loader2 } from 'lucide-react'
+import { Sparkles, Send, ChevronDown, ShoppingBasket, Loader2 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { useAppStore } from '../store'
 import { runDemoAgent, type AgentAction } from '../lib/demo-agent'

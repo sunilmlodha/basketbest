@@ -69,6 +69,7 @@ export type ProductCategory =
   | 'bakery'
   | 'dairy'
   | 'meat-fish'
+  | 'breakfast'
 
 export interface Product {
   id: string

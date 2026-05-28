@@ -271,8 +271,8 @@ export function ComparisonPage() {
               ) : (
                 <div className="text-right">
                   <span className="text-sm font-semibold text-gray-900">{result.totalPrice ? formatGBP(result.totalPrice) : '—'}</span>
-                  {result.loyaltySaving > 0 && (
-                    <div className="text-xs text-brand-600">-{formatGBP(result.loyaltySaving)} loyalty</div>
+                  {(result.loyaltySaving ?? 0) > 0 && (
+                    <div className="text-xs text-brand-600">-{formatGBP(result.loyaltySaving ?? 0)} loyalty</div>
                   )}
                 </div>
               )}
