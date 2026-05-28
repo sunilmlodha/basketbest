@@ -3,6 +3,9 @@
 -- Migration 002
 -- ============================================================
 
+-- Required for gen_random_bytes() used in invite/share tokens
+create extension if not exists "pgcrypto";
+
 -- ── Subscription tiers ────────────────────────────────────────
 create type subscription_tier as enum ('free', 'plus', 'family');
 create type subscription_status as enum ('active', 'cancelled', 'past_due', 'trialing', 'paused');
@@ -87,7 +90,7 @@ create table if not exists household_members (
   owner_id    uuid not null references profiles on delete cascade,
   member_id   uuid references profiles on delete set null,
   invite_email text not null,
-  invite_token text unique default encode(gen_random_bytes(24), 'base64'),
+  invite_token text unique default replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', ''),
   status      text not null default 'pending',  -- 'pending', 'accepted', 'revoked'
   role        text not null default 'member',   -- 'owner', 'member'
   created_at  timestamptz not null default now()
@@ -103,7 +106,7 @@ create table if not exists basket_shares (
   id          uuid primary key default gen_random_uuid(),
   basket_id   text not null,
   owner_id    uuid not null references profiles on delete cascade,
-  share_token text unique default encode(gen_random_bytes(16), 'hex'),
+  share_token text unique default replace(gen_random_uuid()::text, '-', ''),
   expires_at  timestamptz,
   created_at  timestamptz not null default now()
 );
