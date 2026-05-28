@@ -1,0 +1,121 @@
+product_id,product_name,brand,category,unit_type,unit_size,tesco,asda,sainsburys,morrisons,ocado,waitrose
+p001,Whole Milk 6 Pints,Own Label,dairy,each,6 pints,1.89,1.79,1.95,1.85,2.10,2.15
+p002,Semi-Skimmed Milk 6 Pints,Own Label,dairy,each,6 pints,1.89,1.79,1.95,1.85,2.10,2.15
+p003,Skimmed Milk 6 Pints,Own Label,dairy,each,6 pints,1.89,1.75,1.95,1.85,2.05,2.10
+p004,Whole Milk 2 Pints,Own Label,dairy,each,2 pints,0.85,0.79,0.90,0.85,1.05,1.15
+p005,Semi-Skimmed Milk 2 Pints,Own Label,dairy,each,2 pints,0.85,0.79,0.90,0.85,1.05,1.15
+p006,Cheddar Cheese 400g,Own Label,dairy,each,400g,2.75,2.50,2.80,2.65,3.10,3.25
+p007,Mature Cheddar 400g,Davidstow,dairy,each,400g,3.50,3.25,3.65,3.40,4.10,4.50
+p008,Mozzarella 125g,Own Label,dairy,each,125g,0.75,0.69,0.80,0.72,0.99,1.10
+p009,Greek Yoghurt 500g,Fage,dairy,each,500g,2.99,2.79,3.10,2.89,3.45,3.60
+p010,Greek Yoghurt 500g,Own Label,dairy,each,500g,1.25,1.10,1.30,1.20,1.65,1.80
+p011,Natural Yoghurt 500g,Own Label,dairy,each,500g,0.89,0.79,0.95,0.85,1.20,1.35
+p012,Butter Unsalted 250g,Own Label,dairy,each,250g,1.75,1.65,1.80,1.70,2.10,2.20
+p013,Butter Salted 250g,Anchor,dairy,each,250g,2.25,2.10,2.35,2.20,2.75,3.00
+p014,Double Cream 300ml,Own Label,dairy,ml,300ml,1.45,1.35,1.50,1.40,1.75,1.85
+p015,Soured Cream 300ml,Own Label,dairy,ml,300ml,0.99,0.89,1.05,0.95,1.35,1.50
+p016,Free Range Eggs 6 Pack,Own Label,fresh,pack,6 eggs,1.75,1.65,1.80,1.70,2.10,2.20
+p017,Free Range Eggs 12 Pack,Own Label,fresh,pack,12 eggs,2.99,2.69,3.10,2.89,3.45,3.60
+p018,Medium Eggs 6 Pack,Own Label,fresh,pack,6 eggs,1.55,1.45,1.60,1.50,1.85,1.95
+p019,Sliced White Bread 800g,Own Label,bakery,each,800g,1.10,0.99,1.15,1.05,1.45,1.55
+p020,Sliced Brown Bread 800g,Own Label,bakery,each,800g,1.15,1.05,1.20,1.10,1.50,1.65
+p021,Wholemeal Bread 800g,Hovis,bakery,each,800g,1.45,1.35,1.50,1.40,1.85,2.00
+p022,White Bread 800g,Warburtons,bakery,each,800g,1.60,1.50,1.65,1.55,1.95,2.10
+p023,Bagels 5 Pack,Own Label,bakery,pack,5 bagels,1.25,1.15,1.30,1.20,1.60,1.75
+p024,Croissants 4 Pack,Own Label,bakery,pack,4 croissants,1.35,1.25,1.40,1.30,1.75,2.50
+p025,Pitta Bread 6 Pack,Own Label,bakery,pack,6 pittas,0.89,0.79,0.95,0.85,1.20,1.35
+p026,Chicken Breast Fillets 500g,Own Label,meat-fish,each,500g,3.50,3.25,3.75,3.40,4.50,5.00
+p027,Chicken Thighs Boneless 800g,Own Label,meat-fish,each,800g,3.10,2.89,3.25,3.00,3.85,4.25
+p028,Chicken Drumsticks 1kg,Own Label,meat-fish,each,1kg,2.50,2.35,2.65,2.45,3.10,3.50
+p029,Whole Chicken Medium,Own Label,meat-fish,each,1.3kg,3.99,3.75,4.25,3.95,4.99,5.50
+p030,British Beef Mince 500g 20pct,Own Label,meat-fish,each,500g,2.89,2.65,3.00,2.75,3.50,4.00
+p031,British Beef Mince 500g 5pct,Own Label,meat-fish,each,500g,3.50,3.25,3.75,3.40,4.50,5.00
+p032,Pork Sausages 8 Pack,Own Label,meat-fish,pack,454g,2.25,2.10,2.40,2.20,2.85,3.25
+p033,Back Bacon Smoked 200g,Own Label,meat-fish,each,200g,2.50,2.35,2.65,2.45,3.10,3.50
+p034,Streaky Bacon 200g,Own Label,meat-fish,each,200g,2.25,2.10,2.40,2.20,2.85,3.25
+p035,Salmon Fillets 2 Pack,Own Label,meat-fish,pack,240g,4.50,4.25,4.75,4.40,5.50,6.00
+p036,Cod Fillets 2 Pack,Own Label,meat-fish,pack,280g,3.75,3.50,4.00,3.65,4.75,5.25
+p037,King Prawns 180g Cooked,Own Label,meat-fish,each,180g,2.75,2.55,2.90,2.65,3.35,3.75
+p038,Smoked Salmon 100g,Own Label,meat-fish,each,100g,2.99,2.79,3.15,2.89,3.65,4.25
+p039,Broccoli,Own Label,fresh,each,each,0.69,0.60,0.75,0.65,0.89,0.99
+p040,Baby Spinach 200g,Own Label,fresh,each,200g,1.25,1.10,1.30,1.20,1.65,1.85
+p041,Bananas 5 Pack,Own Label,fresh,pack,5 bananas,0.68,0.59,0.70,0.65,0.89,0.99
+p042,Apples Braeburn 6 Pack,Own Label,fresh,pack,6 apples,1.35,1.25,1.45,1.30,1.75,1.95
+p043,Carrots 1kg,Own Label,fresh,each,1kg,0.55,0.49,0.60,0.55,0.79,0.89
+p044,Maris Piper Potatoes 2.5kg,Own Label,fresh,each,2.5kg,1.85,1.75,1.95,1.80,2.25,2.50
+p045,Onions 1kg,Own Label,fresh,each,1kg,0.79,0.69,0.85,0.75,1.05,1.15
+p046,Tomatoes on the Vine 500g,Own Label,fresh,each,500g,1.50,1.35,1.60,1.45,1.95,2.15
+p047,Cherry Tomatoes 400g,Own Label,fresh,each,400g,1.25,1.15,1.35,1.20,1.65,1.85
+p048,Cucumber,Own Label,fresh,each,each,0.55,0.49,0.60,0.55,0.79,0.89
+p049,Iceberg Lettuce,Own Label,fresh,each,each,0.59,0.50,0.65,0.55,0.85,0.95
+p050,Closed Cup Mushrooms 400g,Own Label,fresh,each,400g,0.89,0.79,0.95,0.85,1.20,1.35
+p051,Mixed Peppers 3 Pack,Own Label,fresh,pack,3 peppers,1.45,1.29,1.55,1.40,1.85,2.05
+p052,Sweet Potatoes 750g,Own Label,fresh,each,750g,1.25,1.10,1.35,1.20,1.65,1.85
+p053,Courgettes 3 Pack,Own Label,fresh,pack,3 courgettes,1.15,1.00,1.20,1.10,1.55,1.75
+p054,Lemons 4 Pack,Own Label,fresh,pack,4 lemons,0.79,0.69,0.85,0.75,1.05,1.15
+p055,Avocados 2 Pack,Own Label,fresh,pack,2 avocados,1.35,1.25,1.45,1.30,1.75,1.95
+p056,Grapes 500g Seedless,Own Label,fresh,each,500g,1.99,1.85,2.10,1.95,2.50,2.75
+p057,Strawberries 400g,Own Label,fresh,each,400g,2.50,2.35,2.65,2.45,3.10,3.40
+p058,Tinned Tomatoes 400g,Napolina,pantry,each,400g,0.89,0.79,0.95,0.85,1.10,1.20
+p059,Tinned Tomatoes 400g,Own Label,pantry,each,400g,0.39,0.35,0.42,0.38,0.55,0.65
+p060,Pasta Penne 500g,Barilla,pantry,each,500g,1.45,1.35,1.50,1.40,1.85,2.00
+p061,Pasta Penne 500g,Own Label,pantry,each,500g,0.65,0.59,0.70,0.65,0.89,1.00
+p062,Spaghetti 500g,Own Label,pantry,each,500g,0.65,0.59,0.70,0.65,0.89,1.00
+p063,Fusilli 500g,Own Label,pantry,each,500g,0.65,0.59,0.70,0.65,0.89,1.00
+p064,Basmati Rice 1kg,Tilda,pantry,each,1kg,2.99,2.79,3.15,2.89,3.65,4.00
+p065,Basmati Rice 1kg,Own Label,pantry,each,1kg,1.89,1.75,1.99,1.85,2.35,2.60
+p066,Olive Oil Extra Virgin 500ml,Filippo Berio,pantry,ml,500ml,4.50,4.25,4.75,4.40,5.25,5.75
+p067,Olive Oil Extra Virgin 500ml,Own Label,pantry,ml,500ml,3.25,3.00,3.45,3.20,3.95,4.35
+p068,Vegetable Oil 1L,Own Label,pantry,L,1L,1.25,1.10,1.35,1.20,1.65,1.85
+p069,Chicken Stock Cubes 10 Pack,Knorr,pantry,pack,10 cubes,1.35,1.25,1.45,1.30,1.75,1.95
+p070,Plain Flour 1.5kg,Own Label,pantry,each,1.5kg,1.09,0.99,1.15,1.05,1.45,1.65
+p071,Self-Raising Flour 1.5kg,Own Label,pantry,each,1.5kg,1.09,0.99,1.15,1.05,1.45,1.65
+p072,Caster Sugar 1kg,Own Label,pantry,each,1kg,0.99,0.89,1.05,0.95,1.25,1.40
+p073,Baked Beans 415g,Heinz,pantry,each,415g,0.99,0.89,1.05,0.95,1.25,1.35
+p074,Baked Beans 415g,Own Label,pantry,each,415g,0.30,0.27,0.32,0.29,0.45,0.55
+p075,Chopped Tomatoes 400g,Cirio,pantry,each,400g,0.99,0.89,1.05,0.95,1.25,1.35
+p076,Coconut Milk 400ml,Own Label,pantry,ml,400ml,0.89,0.79,0.95,0.85,1.20,1.35
+p077,Peanut Butter Smooth 340g,Own Label,pantry,each,340g,1.75,1.65,1.85,1.70,2.25,2.50
+p078,Honey Clear 340g,Own Label,pantry,each,340g,1.99,1.85,2.10,1.95,2.50,2.75
+p079,Tomato Ketchup 570g,Heinz,pantry,each,570g,2.50,2.35,2.65,2.45,3.10,3.40
+p080,Orange Juice 1L,Tropicana,drinks,L,1L,2.25,2.10,2.40,2.20,2.75,3.00
+p081,Orange Juice 1L,Own Label,drinks,L,1L,0.99,0.89,1.05,0.95,1.35,1.50
+p082,Apple Juice 1L,Own Label,drinks,L,1L,0.99,0.89,1.05,0.95,1.35,1.50
+p083,Sparkling Water 2L,Own Label,drinks,L,2L,0.30,0.27,0.32,0.29,0.45,0.55
+p084,Still Water 6x500ml,Own Label,drinks,pack,6x500ml,1.25,1.10,1.35,1.20,1.65,1.85
+p085,Instant Coffee 100g,Nescafe Original,drinks,each,100g,3.50,3.25,3.75,3.40,4.25,4.75
+p086,Ground Coffee 200g,Lavazza,drinks,each,200g,3.99,3.75,4.25,3.95,4.99,5.50
+p087,Tea Bags 80 Pack,PG Tips,drinks,pack,80 bags,2.50,2.35,2.65,2.45,3.10,3.40
+p088,Cornflakes 500g,Kelloggs,breakfast,each,500g,2.49,2.35,2.65,2.45,3.10,3.40
+p089,Weetabix 24 Pack,Weetabix,breakfast,pack,24 biscuits,2.89,2.69,3.10,2.85,3.60,3.95
+p090,Porridge Oats 1kg,Own Label,breakfast,each,1kg,1.15,1.05,1.25,1.10,1.55,1.75
+p091,Rolled Oats 1kg,Quaker,breakfast,each,1kg,2.25,2.10,2.40,2.20,2.85,3.10
+p092,Granola 500g,Own Label,breakfast,each,500g,1.99,1.85,2.10,1.95,2.50,2.75
+p093,Toilet Roll 9 Pack,Andrex,household,pack,9 rolls,4.50,4.25,4.75,4.40,5.25,5.75
+p094,Toilet Roll 9 Pack,Own Label,household,pack,9 rolls,2.50,2.25,2.65,2.40,3.25,3.75
+p095,Washing Up Liquid 500ml,Fairy Original,household,ml,500ml,1.99,1.85,2.10,1.95,2.45,2.65
+p096,Washing Up Liquid 500ml,Own Label,household,ml,500ml,0.65,0.59,0.70,0.65,0.89,0.99
+p097,Kitchen Roll 2 Pack,Own Label,household,pack,2 rolls,1.45,1.35,1.55,1.40,1.85,2.05
+p098,Dishwasher Tablets 30 Pack,Fairy Platinum,household,pack,30 tablets,6.99,6.50,7.25,6.75,8.25,9.00
+p099,Laundry Capsules 20 Pack,Ariel,household,pack,20 capsules,8.99,8.50,9.50,8.75,10.50,11.50
+p100,Bin Bags 50L 20 Pack,Own Label,household,pack,20 bags,1.99,1.79,2.10,1.95,2.50,2.75
+p101,Cling Film 30m,Own Label,household,each,30m,1.15,1.05,1.25,1.10,1.55,1.75
+p102,Foil 10m,Own Label,household,each,10m,0.99,0.89,1.05,0.95,1.35,1.50
+p103,Walkers Crisps Ready Salted 6pk,Walkers,snacks,pack,6 bags,1.99,1.85,2.10,1.95,2.45,2.65
+p104,Chocolate Digestives 266g,McVities,snacks,each,266g,1.99,1.85,2.10,1.95,2.45,2.65
+p105,Cadbury Dairy Milk 200g,Cadbury,snacks,each,200g,2.50,2.35,2.65,2.45,3.10,3.40
+p106,Mixed Nuts 200g,Own Label,snacks,each,200g,2.25,2.10,2.40,2.20,2.85,3.25
+p107,Hummus 200g,Own Label,snacks,each,200g,1.25,1.10,1.35,1.20,1.65,1.85
+p108,Frozen Peas 900g,Own Label,frozen,each,900g,1.25,1.10,1.35,1.20,1.65,1.85
+p109,Frozen Chips Straight Cut 1.5kg,McCain,frozen,each,1.5kg,2.99,2.79,3.15,2.89,3.65,4.00
+p110,Vanilla Ice Cream 1L,Carte DOr,frozen,L,1L,3.50,3.25,3.75,3.40,4.25,4.75
+p111,Frozen Sweetcorn 1kg,Own Label,frozen,each,1kg,1.15,1.05,1.25,1.10,1.55,1.75
+p112,Frozen Spinach 750g,Own Label,frozen,each,750g,1.25,1.10,1.35,1.20,1.65,1.85
+p113,Chicken Tikka Masala Ready Meal 450g,Own Label,ready-meals,each,450g,3.50,3.25,3.75,3.40,4.25,4.75
+p114,Lasagne Ready Meal 400g,Own Label,ready-meals,each,400g,2.99,2.79,3.15,2.89,3.65,4.00
+p115,Spaghetti Bolognese Ready Meal 400g,Own Label,ready-meals,each,400g,2.50,2.35,2.65,2.45,3.10,3.40
+p116,Soup Tomato 400g,Heinz,ready-meals,each,400g,0.99,0.89,1.05,0.95,1.25,1.40
+p117,Sea Salt 750g,Maldon,pantry,each,750g,2.99,2.79,3.15,2.89,3.65,4.25
+p118,Sea Salt 750g,Own Label,pantry,each,750g,0.99,0.89,1.05,0.95,1.35,1.50
+p119,Black Pepper Ground 50g,Own Label,pantry,each,50g,0.89,0.79,0.95,0.85,1.20,1.35
+p120,Paprika 50g,Own Label,pantry,each,50g,0.89,0.79,0.95,0.85,1.20,1.35

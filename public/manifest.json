@@ -1,0 +1,73 @@
+{
+  "name": "BasketBest UK",
+  "short_name": "BasketBest",
+  "description": "Compare UK superstore prices and save on your weekly shop",
+  "start_url": "/basket",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0fdf4",
+  "theme_color": "#16a34a",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "categories": ["shopping", "food", "finance"],
+  "icons": [
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/basket-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Basket view showing items and total savings"
+    },
+    {
+      "src": "/screenshots/comparison-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Price comparison across UK supermarkets"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Basket",
+      "short_name": "Basket",
+      "description": "Open your current shopping basket",
+      "url": "/basket",
+      "icons": [{ "src": "/icons/icon-72.png", "sizes": "72x72" }]
+    },
+    {
+      "name": "Compare Prices",
+      "short_name": "Compare",
+      "description": "Compare prices across supermarkets",
+      "url": "/compare",
+      "icons": [{ "src": "/icons/icon-72.png", "sizes": "72x72" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
