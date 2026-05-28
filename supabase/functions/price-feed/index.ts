@@ -1,9 +1,13 @@
 /**
  * price-feed — Supabase Edge Function
  *
- * Fetches real UK grocery prices from the Trolley.co.uk API for a list of
- * products, upserts fresh data into `price_cache`, and returns a structured
+ * Fetches real UK grocery prices via Apify actors for a list of products,
+ * upserts fresh data into `price_cache`, and returns a structured
  * per-product, per-store price result.
+ *
+ * Tesco:        jupri/tesco-grocery  (dedicated actor, live)
+ * Other stores: Apify generic web-scraper with store-specific CSS selectors
+ *               Falls back to cache if scraper returns nothing.
  *
  * POST /functions/v1/price-feed
  * Body: { products: Array<{ id: string; name: string }>, basketId?: string }
@@ -20,13 +24,13 @@
  * }
  *
  * Env vars required:
- *   SUPABASE_URL             — set automatically by Supabase runtime
+ *   SUPABASE_URL              — set automatically by Supabase runtime
  *   SUPABASE_SERVICE_ROLE_KEY — set automatically by Supabase runtime
- *   TROLLEY_API_KEY           — from Trolley.co.uk developer portal
+ *   APIFY_TOKEN               — from https://console.apify.com/account/integrations
  */
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
-import { fetchBasketPrices } from './trolley-adapter.ts'
+import { fetchBasketPricesApify } from './apify-adapter.ts'
 import type { StoreId } from '../_shared/types.ts'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -139,7 +143,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   // ── Initialise clients ─────────────────────────────────────────────────────
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-  const trolleyKey = Deno.env.get('TROLLEY_API_KEY') ?? ''
+  const apifyToken = Deno.env.get('APIFY_TOKEN') ?? ''
 
   const supabase = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false },
@@ -148,19 +152,19 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const fetchedAt = nowIso()
   const expiresAt = expiresIso()
 
-  // ── Fetch live prices from Trolley API ─────────────────────────────────────
-  const productNames = validProducts.map((p) => p.name)
+  // ── Fetch live prices via Apify actors ─────────────────────────────────────
+  // fetchBasketPricesApify returns Map<productName, Partial<Record<StoreId, number>>>
   let livePricesMap = new Map<string, Partial<Record<string, number>>>()
 
-  if (trolleyKey) {
+  if (apifyToken) {
     try {
-      livePricesMap = await fetchBasketPrices(productNames, trolleyKey)
+      livePricesMap = await fetchBasketPricesApify(validProducts, apifyToken)
     } catch (err) {
       // Non-fatal: log and fall through to cache-only path
-      console.error('[price-feed] Trolley API batch error:', err)
+      console.error('[price-feed] Apify batch error:', err)
     }
   } else {
-    console.warn('[price-feed] TROLLEY_API_KEY not set — serving from cache only')
+    console.warn('[price-feed] APIFY_TOKEN not set — serving from cache only')
   }
 
   // ── Load existing cache rows for fallback ──────────────────────────────────
@@ -189,7 +193,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const upsertRecords: PriceCacheRow[] = []
 
   for (const product of validProducts) {
-    const livePrices = livePricesMap.get(product.name)
+    // Apify adapter keys by product.id (see fetchBasketPricesApify)
+    const livePrices = livePricesMap.get(product.id)
     const prices = emptyPriceRecord()
     let source: PriceSource = 'unavailable'
     let hasAnyPrice = false
